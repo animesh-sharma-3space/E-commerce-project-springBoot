@@ -1,21 +1,15 @@
 package com.jtspringproject.JtSpringProject.controller;
 
-import com.jtspringproject.JtSpringProject.models.Cart;
 import com.jtspringproject.JtSpringProject.models.Product;
 import com.jtspringproject.JtSpringProject.models.User;
 
-import java.io.Console;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.jtspringproject.JtSpringProject.services.cartService;
+import com.jtspringproject.JtSpringProject.services.CartService;
+import com.jtspringproject.JtSpringProject.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -23,18 +17,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jtspringproject.JtSpringProject.services.userService;
-import com.jtspringproject.JtSpringProject.services.productService;
-import com.jtspringproject.JtSpringProject.services.cartService;
+import com.jtspringproject.JtSpringProject.services.ProductService;
 
 @Controller
 public class UserController{
 
-	private final userService userService;
-	private final productService productService;
+	private final UserService userService;
+	private final ProductService productService;
 
 	@Autowired
-	public UserController(userService userService, productService productService) {
+	public UserController(UserService userService, ProductService productService) {
 		this.userService = userService;
 		this.productService = productService;
 	}

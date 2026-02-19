@@ -12,14 +12,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.jtspringproject.JtSpringProject.models.User;
-import com.jtspringproject.JtSpringProject.services.userService;
+import com.jtspringproject.JtSpringProject.services.UserService;
 
 @Configuration
 public class SecurityConfiguration {
 	
-	userService UserService;
+	UserService UserService;
 
-	public SecurityConfiguration(userService UserService) {
+	public SecurityConfiguration(UserService UserService) {
 		this.UserService = UserService;
 	}
 

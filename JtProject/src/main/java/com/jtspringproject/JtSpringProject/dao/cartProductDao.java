@@ -31,7 +31,7 @@ public class cartProductDao {
     }
 
     @Transactional
-    public List<Product> getProductByCartID(Integer cart_id) {
+    public List<Product> getProductByCartID(int cart_id) {
         String sql = "SELECT product_id FROM cart_product WHERE cart_id = :cart_id";
         List<Integer> productIds = this.sessionFactory.getCurrentSession()
                 .createNativeQuery(sql)

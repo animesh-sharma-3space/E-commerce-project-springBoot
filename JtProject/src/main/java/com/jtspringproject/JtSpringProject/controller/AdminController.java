@@ -23,20 +23,20 @@ import org.springframework.web.servlet.ModelAndView;
 import com.jtspringproject.JtSpringProject.models.Category;
 import com.jtspringproject.JtSpringProject.models.Product;
 import com.jtspringproject.JtSpringProject.models.User;
-import com.jtspringproject.JtSpringProject.services.categoryService;
-import com.jtspringproject.JtSpringProject.services.productService;
-import com.jtspringproject.JtSpringProject.services.userService;
+import com.jtspringproject.JtSpringProject.services.CategoryService;
+import com.jtspringproject.JtSpringProject.services.ProductService;
+import com.jtspringproject.JtSpringProject.services.UserService;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-	private final userService userService;
-	private final categoryService categoryService;
-	private final productService productService;
+	private final UserService userService;
+	private final CategoryService categoryService;
+	private final ProductService productService;
 
 	@Autowired
-	public AdminController(userService userService, categoryService categoryService, productService productService) {
+	public AdminController(UserService userService, CategoryService categoryService, ProductService productService) {
 		this.userService = userService;
 		this.categoryService = categoryService;
 		this.productService = productService;

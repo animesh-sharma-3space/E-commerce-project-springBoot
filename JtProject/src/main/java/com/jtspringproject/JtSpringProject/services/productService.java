@@ -9,29 +9,40 @@ import com.jtspringproject.JtSpringProject.dao.productDao;
 import com.jtspringproject.JtSpringProject.models.Product;
 
 @Service
-public class productService {
+public class ProductService {
 	@Autowired
-	private productDao productDao;
+	public productDao ProductDao;
 	
 	public List<Product> getProducts(){
-		return this.productDao.getProducts();
+		return ProductDao.getProducts();
 	}
 	
 	public Product addProduct(Product product) {
-		return this.productDao.addProduct(product);
+		return ProductDao.addProduct(product);
 	}
 	
 	public Product getProduct(int id) {
-		return this.productDao.getProduct(id);
+		return ProductDao.getProduct(id);
 	}
+
+	public Product getProductByName(String name){return ProductDao.getProductByname(name);}
 
 	public Product updateProduct(int id,Product product){
 		product.setId(id);
-		return this.productDao.updateProduct(product);
+		return ProductDao.updateProduct(product);
+	}
+	public Product updateProductPrice(int price, Product product){
+		product.setPrice(price);
+		return ProductDao.updateProduct(product);
 	}
 	public boolean deleteProduct(int id) {
-		return this.productDao.deletProduct(id);
+		return ProductDao.deleteProduct(id);
+	}
+    public List<Product> sortonprice(){
+		return ProductDao.sortonprice();
+	}
+	public List<Product> sortoncategory(String name){
+		return ProductDao.sortonCategory(name);
 	}
 
-	
 }
