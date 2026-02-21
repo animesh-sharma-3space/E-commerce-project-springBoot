@@ -62,7 +62,7 @@ public class SecurityConfiguration {
 		@Bean
 		SecurityFilterChain userFilterChain(HttpSecurity http) throws Exception {
             http.authorizeHttpRequests(requests -> requests
-            		.antMatchers("/login", "/register", "/newuserregister" ,"/test", "/test2").permitAll()
+            		.antMatchers("/login", "/register", "/newuserregister" ,"/test", "/test2","/products","/allusers","/searchproducts","/logs").permitAll()
                     .antMatchers("/**").hasRole("USER"))
                     .formLogin(login -> login
                             .loginPage("/login")
@@ -97,15 +97,11 @@ public class SecurityConfiguration {
 			
 			return org.springframework.security.core.userdetails.User
 					.withUsername(username)
-					.passwordEncoder(input->passwordEncoder().encode(input))
 					.password(user.getPassword())
 					.roles(role)
 					.build();
 		};
 	}
 
-	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+
 }

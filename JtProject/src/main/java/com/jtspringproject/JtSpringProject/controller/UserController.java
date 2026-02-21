@@ -1,5 +1,6 @@
 package com.jtspringproject.JtSpringProject.controller;
 
+import com.jtspringproject.JtSpringProject.models.Logs;
 import com.jtspringproject.JtSpringProject.models.Product;
 import com.jtspringproject.JtSpringProject.models.User;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.jtspringproject.JtSpringProject.services.CartService;
+import com.jtspringproject.JtSpringProject.services.LogService;
 import com.jtspringproject.JtSpringProject.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,18 +21,23 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.jtspringproject.JtSpringProject.services.ProductService;
 
-@Controller
+@RestController
 public class UserController{
 
 	private final UserService userService;
 	private final ProductService productService;
+	private final LogService logService;
 
 	@Autowired
-	public UserController(UserService userService, ProductService productService) {
+	public UserController(UserService userService, ProductService productService,LogService logService) {
 		this.userService = userService;
 		this.productService = productService;
+		this.logService=logService;
 	}
-
+	@GetMapping("/logs")
+	public List<Logs> getalllogs(){
+		return logService.getalllogs();
+	}
 	@GetMapping("/register")
 	public String registerUser()
 	{
@@ -51,7 +58,15 @@ public class UserController{
 	    }
 	    return mv;
 	}
-	
+	@GetMapping("/allusers")
+	public List<User> getall(){
+		return this.userService.getUsers();
+	}
+	@GetMapping("/searchproducts")
+	@ResponseBody
+	public Product getproductbyname(@RequestParam Long userid,@RequestParam String keyword){
+		return productService.getProductByName(keyword,userid);
+	}
 	@GetMapping("/")
 	public ModelAndView indexPage()
 	{
@@ -67,7 +82,10 @@ public class UserController{
 		}
 		return mView;
 	}
-	
+	@GetMapping("/products")
+	public List<Product> getallproduct(){
+		return this.productService.getProducts();
+	}
 	@GetMapping("/user/products")
 	public ModelAndView getproduct() {
 

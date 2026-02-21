@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 
+import com.jtspringproject.JtSpringProject.models.Logs;
+import com.jtspringproject.JtSpringProject.services.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,14 +36,19 @@ public class AdminController {
 	private final UserService userService;
 	private final CategoryService categoryService;
 	private final ProductService productService;
+	private final LogService logservice;
 
 	@Autowired
-	public AdminController(UserService userService, CategoryService categoryService, ProductService productService) {
+	public AdminController(UserService userService, CategoryService categoryService, ProductService productService, LogService logservice) {
 		this.userService = userService;
 		this.categoryService = categoryService;
 		this.productService = productService;
+		this.logservice= logservice;
 	}
-	
+	@GetMapping("/logs")
+	public List<Logs> getalllogs(){
+		return logservice.getalllogs();
+	}
 	@GetMapping("/index")
 	public String index(Model model) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -249,5 +256,6 @@ public class AdminController {
 		}
 		return "redirect:index";
 	}
+
 
 }
