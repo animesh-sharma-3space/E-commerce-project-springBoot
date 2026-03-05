@@ -1,25 +1,22 @@
 package com.jtspringproject.JtSpringProject.controller;
 
-import com.jtspringproject.JtSpringProject.models.Logs;
-import com.jtspringproject.JtSpringProject.models.Product;
-import com.jtspringproject.JtSpringProject.models.User;
+import DTO.AddToCartRequest;
+import DTO.OrderRequest;
+import com.jtspringproject.JtSpringProject.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.jtspringproject.JtSpringProject.services.CartService;
-import com.jtspringproject.JtSpringProject.services.LogService;
-import com.jtspringproject.JtSpringProject.services.UserService;
+import com.jtspringproject.JtSpringProject.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.jtspringproject.JtSpringProject.services.ProductService;
 
 @RestController
 public class UserController{
@@ -27,12 +24,17 @@ public class UserController{
 	private final UserService userService;
 	private final ProductService productService;
 	private final LogService logService;
+	private final OrderService orderservice;
+	private final CartService cartservice;
 
 	@Autowired
-	public UserController(UserService userService, ProductService productService,LogService logService) {
+	public UserController(UserService userService, ProductService productService,LogService logService,
+						  OrderService orderservice, CartService cartservice) {
 		this.userService = userService;
 		this.productService = productService;
 		this.logService=logService;
+		this.orderservice=orderservice;
+		this.cartservice=cartservice;
 	}
 	@GetMapping("/logs")
 	public List<Logs> getalllogs(){
@@ -44,10 +46,21 @@ public class UserController{
 		return "register";
 	}
 
-	@GetMapping("/buy")
-	public String buy()
-	{
-		return "buy";
+	@PostMapping("/Placeorder")
+	@ResponseBody
+	public ResponseEntity<String> placeOrderTest(@RequestBody OrderRequest order) {
+		orderservice.placeorder(order);
+		return ResponseEntity.ok("Order placed for userId=" + order.getUserId());
+	}
+    @GetMapping("/allorders")
+	public List<Order> getallorders(){
+		return this.orderservice.getallorders();
+	}
+    @PostMapping("/addtocart")
+	@ResponseBody
+	public ResponseEntity<String> addtocart(@RequestBody AddToCartRequest req){
+		cartservice.addProductToCart(req.getUserId(),req.getProductId());
+		return ResponseEntity.ok("Product added to the cart");
 	}
 
 	@GetMapping("/login")
@@ -62,10 +75,16 @@ public class UserController{
 	public List<User> getall(){
 		return this.userService.getUsers();
 	}
+
 	@GetMapping("/searchproducts")
 	@ResponseBody
 	public Product getproductbyname(@RequestParam Long userid,@RequestParam String keyword){
 		return productService.getProductByName(keyword,userid);
+	}
+
+	@GetMapping("/getallcarts")
+	public List<Cart> getallcarts(){
+		return cartservice.getCarts();
 	}
 	@GetMapping("/")
 	public ModelAndView indexPage()
@@ -86,6 +105,7 @@ public class UserController{
 	public List<Product> getallproduct(){
 		return this.productService.getProducts();
 	}
+
 	@GetMapping("/user/products")
 	public ModelAndView getproduct() {
 
@@ -101,7 +121,13 @@ public class UserController{
 
 		return mView;
 	}
-	
+   //  /newuser endpoint is made for testing the buying logic
+	@PostMapping("/newuser")
+	@ResponseBody
+	public void adduser(@RequestBody User user){
+		this.userService.addUser(user);
+		this.cartservice.addCart(user);
+	}
 	@RequestMapping(value = "newuserregister", method = RequestMethod.POST)
 	public ModelAndView newUseRegister(@ModelAttribute User user)
 	{
@@ -112,7 +138,7 @@ public class UserController{
 			System.out.println(user.getEmail());
 			user.setRole("ROLE_NORMAL");
 			this.userService.addUser(user);
-
+            this.cartservice.addCart(user);
 			System.out.println("New user created: " + user.getUsername());
 			ModelAndView mView = new ModelAndView("userLogin");
 			return mView;
