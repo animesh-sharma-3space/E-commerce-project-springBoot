@@ -43,6 +43,12 @@ public class productDao {
 	}
 
 	@Transactional
+	public void updateproductprice(int id,int price){
+		Product product=this.sessionFactory.getCurrentSession().get(Product.class,id);
+		product.setPrice(price);
+		this.sessionFactory.getCurrentSession().update(product);
+	}
+	@Transactional
 	public boolean deleteProduct(int id) {
 		Session session = sessionFactory.getCurrentSession();
 		Product product = session.get(Product.class, id);

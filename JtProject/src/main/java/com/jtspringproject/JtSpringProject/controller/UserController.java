@@ -36,6 +36,9 @@ public class UserController{
 		this.orderservice=orderservice;
 		this.cartservice=cartservice;
 	}
+	@Autowired
+	DiscountService discountService;
+
 	@GetMapping("/logs")
 	public List<Logs> getalllogs(){
 		return logService.getalllogs();
@@ -55,6 +58,10 @@ public class UserController{
     @GetMapping("/allorders")
 	public List<Order> getallorders(){
 		return this.orderservice.getallorders();
+	}
+	@GetMapping("/Discounts")
+	public List<Discount> getalldiscount(){
+		return discountService.getalldiscount();
 	}
     @PostMapping("/addtocart")
 	@ResponseBody

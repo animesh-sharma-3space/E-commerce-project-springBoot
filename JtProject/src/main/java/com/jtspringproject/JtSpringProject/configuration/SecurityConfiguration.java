@@ -32,6 +32,7 @@ public class SecurityConfiguration {
             http.antMatcher("/admin/**") 
                    .authorizeHttpRequests(requests -> requests
             		 .requestMatchers(new AntPathRequestMatcher("/admin/login")).permitAll()
+						   .requestMatchers(new AntPathRequestMatcher("/admin/setprice")).permitAll()
                      .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
                     )
                     .formLogin(login -> login
@@ -62,7 +63,7 @@ public class SecurityConfiguration {
 		@Bean
 		SecurityFilterChain userFilterChain(HttpSecurity http) throws Exception {
             http.authorizeHttpRequests(requests -> requests
-            		.antMatchers("/login", "/register", "/newuserregister" ,"/test", "/test2","/products","/allusers","/searchproducts","/logs","/Placeorder","/addtocart","/getallcarts","/newuser","/allorders").permitAll()
+            		.antMatchers("/login", "/register", "/newuserregister" ,"/test", "/test2","/products","/allusers","/searchproducts","/logs","/Placeorder","/addtocart","/getallcarts","/newuser","/allorders","/Discounts").permitAll()
                     .antMatchers("/**").hasRole("USER"))
                     .formLogin(login -> login
                             .loginPage("/login")

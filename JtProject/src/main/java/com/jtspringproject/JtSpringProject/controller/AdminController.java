@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 
+import DTO.productdto;
 import com.jtspringproject.JtSpringProject.models.Logs;
 import com.jtspringproject.JtSpringProject.services.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.jtspringproject.JtSpringProject.models.Category;
@@ -49,6 +45,13 @@ public class AdminController {
 	public List<Logs> getalllogs(){
 		return logservice.getalllogs();
 	}
+
+	@PostMapping("/setprice")
+	@ResponseBody
+	public void setprice( @RequestBody productdto product){
+		this.productService.updateProductPrice(product.id,product);
+	}
+
 	@GetMapping("/index")
 	public String index(Model model) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();

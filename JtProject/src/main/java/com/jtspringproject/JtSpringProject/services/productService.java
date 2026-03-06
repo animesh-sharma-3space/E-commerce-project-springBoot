@@ -3,10 +3,13 @@ package com.jtspringproject.JtSpringProject.services;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import DTO.DiscountPrice;
+import DTO.productdto;
+import com.jtspringproject.JtSpringProject.dao.DiscountDao;
 import com.jtspringproject.JtSpringProject.dao.LogsDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.context.ApplicationEventPublisher;
 import com.jtspringproject.JtSpringProject.dao.productDao;
 import com.jtspringproject.JtSpringProject.models.Product;
 
@@ -16,7 +19,11 @@ public class ProductService {
 	public productDao ProductDao;
 	@Autowired
 	public LogService logservice;
-	
+    @Autowired
+	public DiscountDao discountDao;
+	@Autowired
+	public ApplicationEventPublisher eventPublisher;
+
 	public List<Product> getProducts(){
 		return ProductDao.getProducts();
 	}
@@ -39,9 +46,22 @@ public class ProductService {
 		product.setId(id);
 		return ProductDao.updateProduct(product);
 	}
-	public Product updateProductPrice(int price, Product product){
-		product.setPrice(price);
-		return ProductDao.updateProduct(product);
+	public void updateProductPrice(int id,productdto product){
+        System.out.println(product);
+		if(product.oldprice>product.newprice){
+			DiscountPrice disprice=new DiscountPrice();
+			disprice.setProductid(id);
+			disprice.setOldprice(product.oldprice);
+			disprice.setNewprice(product.newprice);
+			ProductDao.updateproductprice(id,product.newprice);
+			eventPublisher.publishEvent(
+					disprice
+			);
+		}
+		else{
+			discountDao.removeDiscount(id);
+			ProductDao.updateproductprice(id,product.newprice);
+		}
 	}
 	public boolean deleteProduct(int id) {
 		return ProductDao.deleteProduct(id);
